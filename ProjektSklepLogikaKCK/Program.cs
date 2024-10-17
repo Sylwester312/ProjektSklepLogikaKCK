@@ -27,7 +27,7 @@ class Program
             Console.WriteLine(product.ToString());
         }*/
 
-        Client client = new Client("Jan", "Jeleń", "example@mail.com");
+        
 
 
         /*
@@ -69,25 +69,37 @@ class Program
         AnsiConsole.MarkupLine("\n[bold]Press [green]Enter[/] to continue...[/]");
         Console.ReadLine(); // Czekanie na naciśnięcie klawisza Enter
 
+        // Pobieranie danych użytkownika (imię, nazwisko, e-mail)
+        string firstName = AnsiConsole.Ask<string>("Enter your [green]First Name[/]:");
+        string lastName = AnsiConsole.Ask<string>("Enter your [green]Last Name[/]:");
+        string email = AnsiConsole.Ask<string>("Enter your [green]Email[/]:");
+
+        Client client = new Client(firstName, lastName, email);
+
+        AnsiConsole.MarkupLine($"\n[bold]Client created:[/] {client.name} {client.surname} - [blue]{client.mail}[/]\n");
+
         while (true)
         {
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose an option:")
-                    .AddChoices("Koszyk", "Wyszukiwarka", "Lista Produktów", "Exit"));
+                    .AddChoices("Koszyk", "Wyszukiwarka", "Lista Produktów", "Czy chcesz ceny netto", "Exit"));
 
             switch (choice)
             {
                 case "Koszyk":
-                    ShowCart(client.cart.GetProducts());
+                    ShowCart(client);
                     break;
 
                 case "Wyszukiwarka":
-                    SearchProduct(shop.products);
+                    SearchProduct(client, shop);
                     break;
 
                 case "Lista Produktów":
-                    ShowProductList(shop.products, client.cart.GetProducts());
+                    ShowProductList(shop.products, client);
+                    break;
+                case "Czy chcesz ceny netto":
+                    ToggleNetPrices(client);
                     break;
 
                 case "Exit":
@@ -95,37 +107,50 @@ class Program
             }
         }
 
-        static void ShowCart(List<Product> cart)
+        static void ShowCart(Client client)
         {
             AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[bold yellow]Your cart contains the following items:[/]");
-            if (cart.Count == 0)
+            if (client.cart.productsInCart.Count == 0)
             {
                 AnsiConsole.MarkupLine("[red]The cart is empty.[/]");
                 return;
             }
 
-            foreach (var item in cart)
+            foreach (var item in client.cart.productsInCart)
             {
-                AnsiConsole.MarkupLine($"[green]{item.name}[/] - {item.price:C}");
+                if (client.wantNetto == false)
+                {
+                    AnsiConsole.MarkupLine($"[green]{item.name}[/] - {item.price:C}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[green]{item.name}[/] - {(item.price) * ((float)(100 - item.category.vat) / 100):C}");
+                }
+                    
             }
-
-            // Obliczanie sumy
             float total = 0;
-            foreach (var item in cart)
+            // Obliczanie sumy
+            if (client.wantNetto == false)
             {
-                total += item.price;
+                total = client.cart.GetFullprice();
+                AnsiConsole.MarkupLine($"\n[bold]Total price:[/] [blue]{total:C}[/]");
+            }
+            else
+            {
+                total = client.cart.GetFullpriceNetto();
+                AnsiConsole.MarkupLine($"\n[bold]Total price Netto:[/] [blue]{total:C}[/]");
             }
 
-            AnsiConsole.MarkupLine($"\n[bold]Total price:[/] [blue]{total:C}[/]");
+
         }
 
-        static void SearchProduct(List<Product> products)
+        static void SearchProduct(Client client, Shop shop)
         {
             AnsiConsole.Clear();
             string searchTerm = AnsiConsole.Ask<string>("Enter the [green]product name[/] to search:");
 
-            var foundProducts = products.FindAll(p => p.name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            var foundProducts = shop.FilterProductsByName(searchTerm);
 
             if (foundProducts.Count == 0)
             {
@@ -134,13 +159,11 @@ class Program
             }
 
             AnsiConsole.MarkupLine("[bold yellow]Search Results:[/]");
-            foreach (var product in foundProducts)
-            {
-                AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price:C}");
-            }
+            //Dokończyć dodawanie do koszyka
+            
         }
 
-        static void ShowProductList(List<Product> products, List<Product> cart)
+        static void ShowProductList(List<Product> products, Client client)
         {
             AnsiConsole.Clear();
             while (true)
@@ -155,7 +178,7 @@ class Program
                 );
 
                 // Dodanie wybranego produktu do koszyka
-                cart.Add(selectedProduct);
+                client.cart.AddItem(selectedProduct);
                 AnsiConsole.MarkupLine($"[green]Added to cart:[/] {selectedProduct.name}");
 
                 // Pytanie, czy użytkownik chce dodać kolejny produkt
@@ -164,6 +187,23 @@ class Program
                 {
                     break;
                 }
+            }
+        }
+
+        static void ToggleNetPrices(Client client)
+        {
+            // Pytanie, czy użytkownik chce ceny netto
+            bool wantNetPrices = AnsiConsole.Confirm("Do you want to see [green]net prices[/]?");
+
+            if (wantNetPrices)
+            {
+                client.wantNetto = true;
+                AnsiConsole.MarkupLine("[yellow]Net prices are now enabled.[/]");
+            }
+            else
+            {
+                client.wantNetto = false;
+                AnsiConsole.MarkupLine("[yellow]Net prices are now disabled.[/]");
             }
         }
     
