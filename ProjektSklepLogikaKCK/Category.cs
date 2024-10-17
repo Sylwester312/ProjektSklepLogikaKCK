@@ -8,8 +8,8 @@ namespace ProjektSklepLogikaKCK
 {
     public class Category
     {
-        private string name;
-        private int vat;
+        public string name;
+        public int vat;
 
         public Category(string name, int vat)
         {
