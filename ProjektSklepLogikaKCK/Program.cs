@@ -13,10 +13,10 @@ class Program
 
         shop.StartShop();
 
-         /*foreach (Product product in shop.products) 
-         {
-             Console.WriteLine(product.ToStringNetto());
-         }*/
+         //foreach (Product product in shop.products) 
+         //{
+         //    Console.WriteLine(product.ToStringNetto());
+         //}
 
         /*var filteredProducts = shop.FilterProductsByName("L");
 
@@ -38,15 +38,14 @@ class Program
             Console.WriteLine(item.ToString());
         }
         Console.WriteLine(client.cart.GetFullprice());
-        Console.WriteLine(client.cart.GetFullpriceNetto());*/
 
-        /*client.cart.DeleteItem(shop.products[5]);
+        client.cart.DeleteItem(shop.products[5]);
 
         foreach (var item in client.cart.GetProducts())
         {
             Console.WriteLine(item.ToString());
         }
-        Console.WriteLine(client.cart.GetFullpriceNetto());*/
+        Console.WriteLine(client.cart.GetFullprice());*/
 
 
         /*var filteredProductsByCategory = shop.FilterProductsByCategory("Jadło");
@@ -56,7 +55,7 @@ class Program
             Console.WriteLine(product.ToString());
         }*/
 
-
+        
 
 
     }
