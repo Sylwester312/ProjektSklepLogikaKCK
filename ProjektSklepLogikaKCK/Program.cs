@@ -159,8 +159,42 @@ class Program
             }
 
             AnsiConsole.MarkupLine("[bold yellow]Search Results:[/]");
-            //Dokończyć dodawanie do koszyka
-            
+            foreach (var product in foundProducts)
+            {
+                if(client.wantNetto == false)
+                AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price}");
+                else
+                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {(product.price) * ((float)(100 - product.category.vat) / 100)}");
+            }
+
+            // Pytanie, czy użytkownik chce dodać produkty do koszyka
+            bool addProduct = AnsiConsole.Confirm("\nDo you want to add any of these products to your cart?");
+            if (!addProduct)
+            {
+                return;
+            }
+
+            // Dodawanie produktów do koszyka
+            while (true)
+            {
+                var selectedProduct = AnsiConsole.Prompt(
+                    new SelectionPrompt<Product>()
+                        .Title("Select a [green]product[/] to add to the cart or [red]press ESC to go back[/]:")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more products)[/]")
+                        .AddChoices(foundProducts)
+                        .UseConverter(p => $"{p.name} - {p.price}")
+                );
+
+                // Dodanie wybranego produktu do koszyka
+                client.cart.AddItem(selectedProduct);
+                AnsiConsole.MarkupLine($"[green]Added to cart:[/] {selectedProduct.name}");
+
+                break;
+            }
+
+
+
         }
 
         static void ShowProductList(List<Product> products, Client client)
