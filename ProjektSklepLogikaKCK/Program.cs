@@ -13,10 +13,10 @@ class Program
 
         shop.StartShop();
 
-         foreach (Product product in shop.products) 
-         {
-             Console.WriteLine(product.ToStringNetto());
-         }
+         //foreach (Product product in shop.products) 
+         //{
+         //    Console.WriteLine(product.ToStringNetto());
+         //}
 
         /*var filteredProducts = shop.FilterProductsByName("L");
 
