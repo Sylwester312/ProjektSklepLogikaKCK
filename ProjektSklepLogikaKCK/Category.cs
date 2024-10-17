@@ -15,8 +15,12 @@ namespace ProjektSklepLogikaKCK
         {
             this.name = name;
             this.vat = vat; 
-        }   
+        }
 
+        public override string ToString()
+        {
+            return name;
+        }
         
     }
 }

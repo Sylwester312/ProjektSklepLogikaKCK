@@ -21,10 +21,16 @@ namespace ProjektSklepLogikaKCK
             this.category = category;
         }
 
+        public override string ToString() 
+        {
+            return name + " | " + description + " | " + price + " | " + category.ToString();
+        }
+
         public string ToStringNetto()
         {
-            
+            return name + " | " + description + " | " + (price*=((float)(100-category.vat)/100)) + " | " + category.ToString();
         }
+
 
 
         public string ProductCategoryToString() { return category.ToString(); }
