@@ -62,7 +62,7 @@ namespace ProjektSklepLogikaKCK
 
         public List<Product> FilterProductsByCategory(string categoryName)
         {
-            return products.Where(p => p.category.name.Equals(categoryName)).ToList();
+            return products.Where(p => p.category.name.StartsWith(categoryName, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         public void StartShop()

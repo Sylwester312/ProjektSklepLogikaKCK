@@ -117,54 +117,122 @@ class Program
                 return;
             }
 
-            foreach (var item in client.cart.productsInCart)
+            // Dodanie opcji "Powrót" do listy wyników
+            var sysCat = new Category("Systemowe", 0);
+            var powrot = new Product("Powrót", "Wróć do poprzedniego menu", 0f, sysCat);
+            var zamow = new Product("Zamów", "Finalizacja zamówienia", 0f, sysCat);
+
+            client.cart.AddItem(powrot);
+            client.cart.AddItem(zamow);
+
+            AnsiConsole.Clear();
+            while (true)
             {
-                if (client.wantNetto == false)
+                var selectedProduct = AnsiConsole.Prompt(
+                    new SelectionPrompt<Product>()
+                        .Title("Select a [green]product[/] to add to the cart or [red]press ESC to go back[/]:")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more products)[/]")
+                        .AddChoices(client.cart.productsInCart)
+                        .UseConverter(p =>
+                        {
+                            if (p.name == "Powrót" || p.name == "Zamów")
+                            {
+                                return $"{p.name} ";
+                            }
+                            else
+                            {
+                                if (client.wantNetto == false)
+                                {
+                                    return $"{p.name} - Cena: {p.price:C}";
+                                }
+                                else
+                                {
+                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                }
+                            }
+
+                        })
+                );
+
+                if (selectedProduct.name == "Powrót")
                 {
-                    AnsiConsole.MarkupLine($"[green]{item.name}[/] - {item.price:C}");
+                    // Wybrano opcję "Powrót", wychodzimy z pętli
+                    break;
+                }
+
+                if (selectedProduct.name == "Zamów")
+                {
+                    client.cart.EmptyCart();
+                    AnsiConsole.MarkupLine("[green] Thanks for your order[/]");
+                    break;
+                }
+
+                client.cart.DeleteItem(selectedProduct);
+                AnsiConsole.MarkupLine($"[green]Deleted from cart:[/] {selectedProduct.name}");
+
+                if (client.cart.productsInCart.Count > 2)
+                {
+                    bool addMore = AnsiConsole.Confirm("Do you want to delete another product from the cart?");
+                    if (!addMore)
+                    {
+                        break;
+                    }
                 }
                 else
                 {
-                    AnsiConsole.MarkupLine($"[green]{item.name}[/] - {(item.price) * ((float)(100 - item.category.vat) / 100):C}");
+                    break;
                 }
-                    
             }
-            float total = 0;
-            // Obliczanie sumy
-            if (client.wantNetto == false)
-            {
-                total = client.cart.GetFullprice();
-                AnsiConsole.MarkupLine($"\n[bold]Total price:[/] [blue]{total:C}[/]");
-            }
-            else
-            {
-                total = client.cart.GetFullpriceNetto();
-                AnsiConsole.MarkupLine($"\n[bold]Total price Netto:[/] [blue]{total:C}[/]");
-            }
-
-
+            client.cart.DeleteItem(powrot);
+            client.cart.DeleteItem(zamow);
         }
 
         static void SearchProduct(Client client, Shop shop)
         {
             AnsiConsole.Clear();
-            string searchTerm = AnsiConsole.Ask<string>("Enter the [green]product name[/] to search:");
 
-            var foundProducts = shop.FilterProductsByName(searchTerm);
+            var searchOption = AnsiConsole.Prompt(
+                 new SelectionPrompt<string>()
+                 .Title("How would you like to search?")
+                 .AddChoices("Name", "Category"));
 
-            if (foundProducts.Count == 0)
+            var foundProducts = new List<Product>();
+
+            if (searchOption == "Name")
             {
-                AnsiConsole.MarkupLine("[red]No products found.[/]");
-                return;
+                string searchTerm = AnsiConsole.Ask<string>("Enter the [green]product name[/] to search:");
+
+                foundProducts = shop.FilterProductsByName(searchTerm);
+
+                if (foundProducts.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No products found.[/]");
+                    return;
+                }
             }
+            else
+            {
+                string searchTerm = AnsiConsole.Ask<string>("Enter the [green]product category[/] to search:");
+
+                foundProducts = shop.FilterProductsByCategory(searchTerm);
+
+                if (foundProducts.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No products found.[/]");
+                    return;
+                }
+            }
+
+
 
             AnsiConsole.MarkupLine("[bold yellow]Search Results:[/]");
             foreach (var product in foundProducts)
             {
                 if(client.wantNetto == false)
-                AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price}");
+                AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price:C}");
                 else
-                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {(product.price) * ((float)(100 - product.category.vat) / 100)}");
+                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {(product.price) * ((float)(100 - product.category.vat) / 100):C}");
             }
 
             // Pytanie, czy użytkownik chce dodać produkty do koszyka
@@ -183,7 +251,25 @@ class Program
                         .PageSize(10)
                         .MoreChoicesText("[grey](Move up and down to reveal more products)[/]")
                         .AddChoices(foundProducts)
-                        .UseConverter(p => $"{p.name} - {p.price}")
+                        .UseConverter(p =>
+                        {
+                            if (p.name == "Powrót" || p.name == "Zamów")
+                            {
+                                return $"{p.name} ";
+                            }
+                            else
+                            {
+                                if (client.wantNetto == false)
+                                {
+                                    return $"{p.name} - Cena: {p.price:C}";
+                                }
+                                else
+                                {
+                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                }
+                            }
+
+                        })
                 );
 
                 // Dodanie wybranego produktu do koszyka
@@ -192,14 +278,18 @@ class Program
 
                 break;
             }
-
-
-
         }
 
         static void ShowProductList(List<Product> products, Client client)
         {
             AnsiConsole.Clear();
+
+            var sysCat = new Category("Systemowe", 0);
+            var powrot = new Product("Powrót", "Wróć do poprzedniego menu", 0f, sysCat);
+
+            products.Add(powrot);
+
+
             while (true)
             {
                 var selectedProduct = AnsiConsole.Prompt(
@@ -208,8 +298,32 @@ class Program
                         .PageSize(10)
                         .MoreChoicesText("[grey](Move up and down to reveal more products)[/]")
                         .AddChoices(products)
-                        .UseConverter(p => $"{p.name} - {p.price:C}")
+                        .UseConverter(p =>
+                        {
+                            if (p.name == "Powrót" || p.name == "Zamów")
+                            {
+                                return $"{p.name} ";
+                            }
+                            else
+                            {
+                                if(client.wantNetto == false)
+                                {
+                                    return $"{p.name} - Cena: {p.price:C}";
+                                }
+                                else
+                                {
+                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                }
+                            }
+
+                        })
                 );
+
+                if (selectedProduct.name == "Powrót")
+                {
+                    // Wybrano opcję "Powrót", wychodzimy z pętli
+                    break;
+                }
 
                 // Dodanie wybranego produktu do koszyka
                 client.cart.AddItem(selectedProduct);
@@ -222,7 +336,10 @@ class Program
                     break;
                 }
             }
+            products.Remove(powrot);
         }
+
+
 
         static void ToggleNetPrices(Client client)
         {

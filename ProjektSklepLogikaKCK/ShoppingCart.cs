@@ -39,10 +39,13 @@ namespace ProjektSklepLogikaKCK
 
         public void EmptyCart()
         {
-            foreach (Product product in productsInCart)
+            productsInCart = new List<Product>();
+            fullprice = 0;
+            fullpriceNetto = 0;
+/*            foreach (Product product in productsInCart)
             {
                 productsInCart.Remove(product); fullprice -= product.price; fullpriceNetto -= product.price *= ((float)(100 - product.category.vat) / 100);
-            }
+            }*/
         }
 
 
