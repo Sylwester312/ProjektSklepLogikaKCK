@@ -14,50 +14,6 @@ class Program
 
         shop.StartShop();
 
-        //foreach (Product product in shop.products) 
-        //{
-        //    Console.WriteLine(product.ToStringNetto());
-        //}
-
-        /*var filteredProducts = shop.FilterProductsByName("L");
-
-        // Wyświetlamy wyniki filtrowania
-        foreach (var product in filteredProducts)
-        {
-            Console.WriteLine(product.ToString());
-        }*/
-
-        
-
-
-        /*
-        client.cart.AddItem(shop.products[0]);
-        client.cart.AddItem(shop.products[3]);
-        client.cart.AddItem(shop.products[5]);
-        client.cart.AddItem(shop.products[8]);
-
-        foreach (var item in client.cart.GetProducts())
-        {
-            Console.WriteLine(item.ToString());
-        }
-        Console.WriteLine(client.cart.GetFullprice());
-
-        client.cart.DeleteItem(shop.products[5]);
-
-        foreach (var item in client.cart.GetProducts())
-        {
-            Console.WriteLine(item.ToString());
-        }
-        Console.WriteLine(client.cart.GetFullprice());*/
-
-
-        /*var filteredProductsByCategory = shop.FilterProductsByCategory("Jadło");
-
-        foreach (var product in filteredProductsByCategory)
-        {
-            Console.WriteLine(product.ToString());
-        }*/
-
         // Wyświetlenie strony tytułowej
         AnsiConsole.Clear();
         AnsiConsole.Write(
@@ -130,7 +86,7 @@ class Program
             {
                 var selectedProduct = AnsiConsole.Prompt(
                     new SelectionPrompt<Product>()
-                        .Title("Wybierz [green]produkt[/] do dodania do koszyka:")
+                        .Title("Wybierz [green]produkt[/] do usunięcia:")
                         .PageSize(10)
                         .MoreChoicesText("[grey](Przesuwaj góra i dół żeby pokazać kolejne produkty)[/]")
                         .AddChoices(client.cart.productsInCart)
@@ -164,7 +120,7 @@ class Program
                 if (selectedProduct.name == "Zamów")
                 {
                     client.cart.EmptyCart();
-                    AnsiConsole.MarkupLine("[green] Dziękujemy za zamówienie.[/]");
+                    AnsiConsole.MarkupLine("[green]Dziękujemy za zamówienie.[/]");
                     break;
                 }
 
@@ -241,17 +197,6 @@ class Program
             {
                 return;
             }
-
-
-
-
-
-
-            // do tego momentu jest zmiana na polski 
-
-
-
-
 
 
 
@@ -371,9 +316,5 @@ class Program
             }
         }
     
-
-    
-
-
     }
 }
