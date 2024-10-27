@@ -17,7 +17,7 @@ class Program
         // Wyświetlenie strony tytułowej
         AnsiConsole.Clear();
         AnsiConsole.Write(
-            new FigletText("Witaj w sklepie AleTanio!")
+            new FigletText(shop.shopName)
                 .Centered()
                 .Color(Color.Green));
 
