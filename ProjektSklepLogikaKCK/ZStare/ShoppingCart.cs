@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjektSklepLogikaKCK
+namespace ProjektSklepLogikaKCK.ZStare
 {
     public class ShoppingCart
     {
@@ -42,10 +42,6 @@ namespace ProjektSklepLogikaKCK
             productsInCart = new List<Product>();
             fullprice = 0;
             fullpriceNetto = 0;
-/*            foreach (Product product in productsInCart)
-            {
-                productsInCart.Remove(product); fullprice -= product.price; fullpriceNetto -= product.price *= ((float)(100 - product.category.vat) / 100);
-            }*/
         }
 
 

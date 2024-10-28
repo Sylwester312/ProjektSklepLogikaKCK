@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjektSklepLogikaKCK
+namespace ProjektSklepLogikaKCK.Models
 {
     public class Shop
     {
-        
+
         public string shopName = "AllegroV2";
-        
+
         public List<Category> categories = new List<Category>();
 
         public List<Product> products = new List<Product>();
@@ -56,7 +56,6 @@ namespace ProjektSklepLogikaKCK
 
         public List<Product> FilterProductsByName(string partialName)
         {
-            // Zwracamy produkty, których nazwa zaczyna się od podanego fragmentu (bez rozróżniania wielkości liter)
             return products.Where(p => p.name.StartsWith(partialName, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 

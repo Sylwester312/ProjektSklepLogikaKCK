@@ -1,11 +1,11 @@
-﻿using Spectre.Console;
+﻿/*using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjektSklepLogikaKCK;
+namespace ProjektSklepLogikaKCK.ZStare;
 class Program
 {
     static void Main(string[] args)
@@ -104,7 +104,7 @@ class Program
                                 }
                                 else
                                 {
-                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                    return $"{p.name} - Cena netto: {p.price * ((float)(100 - p.category.vat) / 100):C}";
                                 }
                             }
 
@@ -185,10 +185,10 @@ class Program
             AnsiConsole.MarkupLine("[bold yellow]Wynik wyszukiwania:[/]");
             foreach (var product in foundProducts)
             {
-                if(client.wantNetto == false)
-                AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price:C}");
+                if (client.wantNetto == false)
+                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price:C}");
                 else
-                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {(product.price) * ((float)(100 - product.category.vat) / 100):C}");
+                    AnsiConsole.MarkupLine($"[green]{product.name}[/] - {product.price * ((float)(100 - product.category.vat) / 100):C}");
             }
 
             // Pytanie, czy użytkownik chce dodać produkty do koszyka
@@ -223,7 +223,7 @@ class Program
                                 }
                                 else
                                 {
-                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                    return $"{p.name} - Cena netto: {p.price * ((float)(100 - p.category.vat) / 100):C}";
                                 }
                             }
 
@@ -264,13 +264,13 @@ class Program
                             }
                             else
                             {
-                                if(client.wantNetto == false)
+                                if (client.wantNetto == false)
                                 {
                                     return $"{p.name} - Cena brutto: {p.price:C}";
                                 }
                                 else
                                 {
-                                    return $"{p.name} - Cena netto: {(p.price) * ((float)(100 - p.category.vat) / 100):C}";
+                                    return $"{p.name} - Cena netto: {p.price * ((float)(100 - p.category.vat) / 100):C}";
                                 }
                             }
 
@@ -315,6 +315,7 @@ class Program
                 AnsiConsole.MarkupLine("Aktualne ceny: [yellow]Brutto[/].");
             }
         }
-    
+
     }
 }
+*/

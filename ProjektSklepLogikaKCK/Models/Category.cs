@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjektSklepLogikaKCK
+namespace ProjektSklepLogikaKCK.Models
 {
     public class Category
     {
@@ -14,13 +14,8 @@ namespace ProjektSklepLogikaKCK
         public Category(string name, int vat)
         {
             this.name = name;
-            this.vat = vat; 
+            this.vat = vat;
         }
 
-        public override string ToString()
-        {
-            return name;
-        }
-        
     }
 }

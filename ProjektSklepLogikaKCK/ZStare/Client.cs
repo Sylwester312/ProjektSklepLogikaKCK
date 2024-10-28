@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjektSklepLogikaKCK
+namespace ProjektSklepLogikaKCK.ZStare
 {
     public class Client
     {
@@ -12,7 +12,7 @@ namespace ProjektSklepLogikaKCK
         public bool wantNetto = false;
         public ShoppingCart cart = new ShoppingCart();
 
-        
+
         public Client(string name, string surname, string mail)
         {
             this.name = name;
@@ -24,7 +24,7 @@ namespace ProjektSklepLogikaKCK
         {
             return name + " " + surname + " " + mail;
         }
-        
+
 
     }
 }
