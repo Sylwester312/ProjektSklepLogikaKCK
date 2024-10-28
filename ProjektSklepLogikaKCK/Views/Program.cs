@@ -152,6 +152,7 @@ namespace ProjektSklepLogikaKCK.Views
                     }
 
                     clientController.DeleteProductFromClientCartDTO(selectedProduct);
+
                     AnsiConsole.MarkupLine($"[green]Usunięto z koszyka:[/] {selectedProduct.Name}");
 
                     if (clientController.CountProductsInCart() > 2)

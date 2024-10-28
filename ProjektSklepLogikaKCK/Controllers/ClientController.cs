@@ -39,14 +39,8 @@ namespace ProjektSklepLogikaKCK.Controllers
 
         public void DeleteProductFromClientCartDTO(ProductDTO product)
         {
-            var newProd = new Product(
-            product.Name,
-            product.Description,
-            product.Price,
-            product.Category
-        );
-
-            client.cart.DeleteItem(newProd);
+            var x = client.cart.productsInCart.FirstOrDefault(product => product.name.Equals(product.name, StringComparison.OrdinalIgnoreCase));
+            client.cart.DeleteItem(x);
         }
 
         public void ClearCart()
