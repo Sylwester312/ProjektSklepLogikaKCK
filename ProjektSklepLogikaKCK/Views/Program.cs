@@ -92,6 +92,8 @@ namespace ProjektSklepLogikaKCK.Views
                 {
                     AnsiConsole.MarkupLine($"Wartość koszyka: [green] {clientController.GetFullCartPriceNetto()} zł[/]");
                 }
+
+                
                 while (true)
                 {
                     var selectedProduct = AnsiConsole.Prompt(
@@ -130,6 +132,7 @@ namespace ProjektSklepLogikaKCK.Views
                     if (selectedProduct.Name == "Zamów")
                     {
                         clientController.ClearCart();
+                        AnsiConsole.Clear();
                         AnsiConsole.MarkupLine("[green]Dziękujemy za zamówienie.[/]");
                         break;
                     }
@@ -150,6 +153,8 @@ namespace ProjektSklepLogikaKCK.Views
                         break;
                     }
                 }
+
+                
                 clientController.DeleteProductFromClientCart(zamow);
                 clientController.DeleteProductFromClientCart(powrot);
             }
@@ -299,6 +304,7 @@ namespace ProjektSklepLogikaKCK.Views
                     bool addMore = AnsiConsole.Confirm("Chcesz dodać kolejny produkt do koszyka?");
                     if (!addMore)
                     {
+                        AnsiConsole.Clear();
                         break;
                     }
                 }
@@ -309,6 +315,7 @@ namespace ProjektSklepLogikaKCK.Views
 
             void ToggleNetPrices()
             {
+                AnsiConsole.Clear();
                 // Pytanie, czy użytkownik chce ceny netto
                 bool wantNetPrices = AnsiConsole.Confirm("Chcesz zobaczyć ceny [green]Netto[/]?");
 
@@ -322,6 +329,7 @@ namespace ProjektSklepLogikaKCK.Views
                     clientController.ChangeVAT(wantNetPrices);
                     AnsiConsole.MarkupLine("Aktualne ceny: [yellow]Brutto[/].");
                 }
+               
             }
 
         }
