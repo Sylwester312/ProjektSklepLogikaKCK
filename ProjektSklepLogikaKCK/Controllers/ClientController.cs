@@ -39,7 +39,7 @@ namespace ProjektSklepLogikaKCK.Controllers
 
         public void DeleteProductFromClientCartDTO(ProductDTO product)
         {
-            var x = client.cart.productsInCart.FirstOrDefault(product => product.name.Equals(product.name, StringComparison.OrdinalIgnoreCase));
+            var x = client.cart.productsInCart.FirstOrDefault(p => p.name.Equals(product.Name, StringComparison.OrdinalIgnoreCase));
             client.cart.DeleteItem(x);
         }
 
