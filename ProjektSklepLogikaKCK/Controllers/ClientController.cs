@@ -79,5 +79,15 @@ namespace ProjektSklepLogikaKCK.Controllers
         {
             client.wantNetto = value;
         }
+
+        public float GetFullCartPrice()
+        {
+            return client.cart.GetFullprice();
+        }
+
+        public float GetFullCartPriceNetto()
+        {
+            return client.cart.GetFullpriceNetto();
+        }
     }
 }

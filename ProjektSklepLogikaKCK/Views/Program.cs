@@ -73,6 +73,7 @@ namespace ProjektSklepLogikaKCK.Views
                     AnsiConsole.MarkupLine("[red]Koszyk jest pusty.[/]");
                     return;
                 }
+                    
 
                 // Dodanie opcji "Powrót" do listy wyników
                 var sysCat = shopController.CreateCategory("Systemowe", 0);
@@ -83,11 +84,19 @@ namespace ProjektSklepLogikaKCK.Views
                 clientController.AddProductToClientCart(zamow);
 
                 AnsiConsole.Clear();
+                if(clientController.WantNetto() == false)
+                {
+                    AnsiConsole.MarkupLine($"Wartość koszyka: [green] {clientController.GetFullCartPrice()} zł[/]");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"Wartość koszyka: [green] {clientController.GetFullCartPriceNetto()} zł[/]");
+                }
                 while (true)
                 {
                     var selectedProduct = AnsiConsole.Prompt(
                         new SelectionPrompt<ProductDTO>()
-                            .Title("Wybierz [green]produkt[/] do usunięcia:")
+                            .Title("Wybierz [green]produkt[/] do usunięcia lub złóż [yellow]zamówienie[/]:")
                             .PageSize(10)
                             .MoreChoicesText("[grey](Przesuwaj góra i dół żeby pokazać kolejne produkty)[/]")
                             .AddChoices(clientController.GetProducts())
