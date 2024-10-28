@@ -133,6 +133,20 @@ namespace ProjektSklepLogikaKCK.Views
                     {
                         clientController.ClearCart();
                         AnsiConsole.Clear();
+                        // Użycie Progress Baru
+                        AnsiConsole.Progress()
+                            .Start(ctx =>
+                            {
+                                // Tworzymy nowy progress task
+                                var task = ctx.AddTask("[yellow]Pakowanie...[/]");
+
+                                // Symulacja postępu
+                                while (!task.IsFinished)
+                                {
+                                    task.Increment(5); // Zwiększamy o 5%
+                                    Thread.Sleep(200); // Krótka przerwa, aby zobaczyć animację
+                                }
+                            });
                         AnsiConsole.MarkupLine("[green]Dziękujemy za zamówienie.[/]");
                         break;
                     }
